@@ -35,6 +35,9 @@ class ContactController
 
     public function store($data)
     {
+        if(!($data['user_id'])){
+            $data['user_id']= $this->getUserIdFromToken();
+        }
         if (Contact::create($data)) {
             echo json_encode(['message' => 'Contact created successfully']);
         } else {
@@ -102,7 +105,7 @@ class ContactController
     {
         $query = $_GET['query'] ?? '';
         if (empty($query)) {
-            http_response_code(400);
+            http_response_code();
             echo json_encode(['error' => 'Search query is required']);
             return;
         }
