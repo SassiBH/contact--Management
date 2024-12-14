@@ -1,33 +1,40 @@
-# Step 1: Build the Vue.js Application
-FROM node:20 AS build-stage
+# Stage 1: Base Setup
+FROM node:20 AS base
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json and install dependencies
 COPY package*.json ./
+RUN npm install
 
-# Install dependencies
-RUN npm install -g npm@10.9.2
-
-# Copy the entire application to the container
+# Copy the app source code
 COPY . .
 
-# Build the Vue app for production
+# Stage 2: Development
+FROM base AS development
+
+# Expose development server port
+EXPOSE 8080
+
+# Default command for development
+CMD ["npm", "run", "serve"]
+
+# Stage 3: Production Build
+FROM base AS build
+
+# Build the Vue.js app
 RUN npm run build
 
-# Step 2: Serve with Nginx
-FROM nginx:alpine
+# Stage 4: Nginx for Production
+FROM nginx:alpine AS production
 
 COPY nginx.conf /etc/nginx/nginx.conf
+# Copy built files to Nginx's HTML directory
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy the built Vue.js files from the previous stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80 (Nginx default port)
+# Expose default Nginx port
 EXPOSE 80
 
-# Start Nginx in the foreground
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

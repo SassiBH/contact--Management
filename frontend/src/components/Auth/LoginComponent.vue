@@ -78,7 +78,7 @@ export default {
     async login() {
       this.errorMessage = ""; // Clear any previous error message
       try {
-        const response = await axios.post("http://localhost:8101/login", {
+        const response = await axios.post(`${process.env.VUE_APP_API_URL}/login`, {
           username: this.username,
           password: this.password,
         });

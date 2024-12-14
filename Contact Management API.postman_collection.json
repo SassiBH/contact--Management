@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "5b8a8a92-6567-4e80-8075-71d78ff32301",
+		"name": "Contact Management API",
+		"description": "API for managing user contacts with authentication.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5890551"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\" : \"user\",\n\"password\" : \"user\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "Register a new user."
+					},
+					"response": [
+						{
+							"name": "Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"sassi\",\n    \"password\": \"sassi123\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8101"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Dec 2024 16:22:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.31"
+								},
+								{
+									"key": "Content-type",
+									"value": "text/html; charset=UTF-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\"error\":\"Username and password are required.\"}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user\",\n    \"password\": \"user\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login to obtain a JWT token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "Get All Contacts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						},
+						"description": "Retrieve all contacts for the authenticated user."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contact",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\" : 10 ,\n    \"first_name\": \"foulen\",\n    \"last_name\": \"ben felten\",\n    \"age\": 50,\n    \"country\": \"tunis\",\n    \"email\": \"foulen@example.com\",\n    \"phone\": \"99875123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						},
+						"description": "Create a new contact."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"saleh\",\n    \"last_name\": \"saleh\",\n    \"age\": 60,\n    \"country\": \"tunis\",\n    \"email\": \"salehsaleh@example.com\",\n    \"phone\": \"20520780\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"2"
+							]
+						},
+						"description": "Update a specific contact by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/contacts/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"2"
+							]
+						},
+						"description": "Delete a specific contact by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Contacts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/contacts/search?query=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": ""
+								}
+							]
+						},
+						"description": "Search for contacts based on a query string."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8101",
+			"type": "default"
+		}
+	]
+}
