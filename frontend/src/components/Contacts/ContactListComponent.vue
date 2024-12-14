@@ -1,19 +1,23 @@
 <template>
   <div class="container mx-auto p-6">
-    <header class="header">
+    <header class="header flex justify-between items-center">
       <div class="logo-container">
-      <img src="https://industryx0.pro/wp-content/uploads/2021/01/cropped-Logo-AI-V1.png" alt="Website Logo" class="logo" />
-      
+        <img
+          src="https://industryx0.pro/wp-content/uploads/2021/01/cropped-Logo-AI-V1.png"
+          alt="Website Logo"
+          class="logo"
+        />
       </div>
-    <!-- Logout Button -->
+      <!-- Logout Button -->
       <button
-      class="bg-red-600 text-white px-6 py-2 rounded-lg mb-6 hover:bg-red-700 transition-all duration-200"
-      @click="logout"
-      >
-      Logout
-      </button>
-
+  class="bg-white text-red-600 px-4 py-2 rounded-lg mb-6 flex items-center space-x-2 min-w-[120px] transition-all duration-200"
+  @click="logout"
+>
+  <span>Logout</span>
+  
+</button>
     </header>
+
     <h1 class="text-4xl font-bold text-gray-900 mb-6">Contacts</h1>
 
     <!-- Search Bar -->
@@ -23,7 +27,7 @@
 
     <!-- Add Contact Button -->
     <button
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mb-4 hover:bg-blue-700 transition-all duration-200"
+      class="bg-blue-600 text-white px-6 py-2 rounded-lg mb-4 hover:bg-blue-700 hover:text-white transition-all duration-200"
       @click="openCreateModal()"
     >
       Add Contact
@@ -72,13 +76,13 @@
         </div>
         <div class="flex flex-col justify-start items-end">
           <button
-            class="bg-green-500 text-white px-4 py-2 rounded-lg mb-2 hover:bg-green-600 transition-all duration-200"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg mb-2 hover:bg-green-600 hover:text-white transition-all duration-200"
             @click="openEditModal(contact)"
           >
             Edit
           </button>
           <button
-            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200"
+            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200"
             @click="promptDelete(contact.id)"
           >
             Delete
@@ -92,6 +96,8 @@
     </footer>
   </div>
 </template>
+
+
 
 <script>
 import SearchBar from './SearchBar.vue';
@@ -141,7 +147,7 @@ export default {
     async fetchContacts() {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get('http://localhost:8101/contacts', {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         this.contacts = response.data;
@@ -157,7 +163,7 @@ export default {
       await this.fetchContacts();
     } else {
       // Perform the search API request
-      const response = await axios.get('http://localhost:8101/contacts/search', {
+      const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts/search`, {
         params: { query },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -173,7 +179,7 @@ export default {
     async createContact(newContact) {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('http://localhost:8101/contacts', newContact, {
+      const response = await axios.post(`${process.env.VUE_APP_API_URL}/contacts`, newContact, {
         headers: { Authorization: `Bearer ${token}` },
       });
       this.contacts.push(response.data); // Add new contact to the list
@@ -191,7 +197,7 @@ export default {
     const token = localStorage.getItem('token');
     try {
       const response = await axios.put(
-        `http://localhost:8101/contacts/${updatedContact.id}`,
+        `${process.env.VUE_APP_API_URL}/contacts/${updatedContact.id}`,
         updatedContact,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -210,7 +216,7 @@ export default {
     async confirmDelete() {
       const token = localStorage.getItem('token');
       try {
-        await axios.delete(`http://localhost:8101/contacts/${this.contactToDelete}`, {
+        await axios.delete(`${process.env.VUE_APP_API_URL}/contacts/${this.contactToDelete}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         this.contacts = this.contacts.filter((contact) => contact.id !== this.contactToDelete);
