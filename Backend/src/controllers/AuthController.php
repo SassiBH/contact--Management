@@ -56,6 +56,13 @@ public function register($data)
     }
 }
 
+public function logout()
+    {
+        
+        header('Authorization:'); // Clear the Authorization header
+        echo json_encode(['message' => 'Logged out successfully']);
+    }
+
 
 
 }
