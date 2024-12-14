@@ -1,6 +1,6 @@
 <?php
 
-$allowedOrigins = ['http://localhost:8080', 'http://localhost:8100'];
+$allowedOrigins = ['http://localhost:8080', 'http://localhost:8100','https://contact-management-orpin.vercel.app/'];
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
 }
