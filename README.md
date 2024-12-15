@@ -29,9 +29,10 @@ Simple web application for contact CRUD implementation whith authentification, u
 Before you begin, ensure you have met the following requirements:
 
 - Docker
-- NodeJs > v20
+- NodeJs >= v20
 - Composer
 - Vue Cli 
+- PHP >= 8.1
 
 ### Steps to Install
 
@@ -54,7 +55,15 @@ Before you begin, ensure you have met the following requirements:
       ```bash
        docker-compose build
        docker-compose up
-
+6. Create .enc file in the backend folder with the following keys and values 
+    ```bash
+    DB_HOST=db
+    DB_NAME=contactManager
+    DB_CHARSET=utf8mb4
+    DB_USER=root
+    DB_PASS=secret
+    JWT_SECRET= your_key
+    JWT_ISSUER= ${process.env.VUE_APP_API_URL}
 ## 🌐 Usage
 
 1. Start docker application
