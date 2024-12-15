@@ -26,7 +26,7 @@ class Router
     }
 
     public function run()
-    {error_log(__DIR__ . '/Controllers/AuthController.php');
+    {
 
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = strtok($_SERVER['REQUEST_URI'], '?'); // Remove query strings
@@ -42,12 +42,6 @@ class Router
                     error_log("Raw input: " . $rawInput); // Log raw input
                     $requestData = json_decode($rawInput, true) ?? [];
                     error_log("Parsed input: " . json_encode($requestData)); // Log parsed data
-                }
-                if (!class_exists($handler[0])) {
-                    error_log("Class not found: " . $handler[0]);
-                    http_response_code(500);
-                    echo json_encode(['error' => 'Controller not found.']);
-                    return;
                 }
     
                 if (is_array($handler)) {
