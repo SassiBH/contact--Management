@@ -145,16 +145,21 @@ export default {
   },
   methods: {
     async fetchContacts() {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        this.contacts = response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    // Check if response.data is an array
+    if (Array.isArray(response.data)) {
+      this.contacts = response.data;
+    } else {
+      console.error('Expected an array but received:', response.data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+},
     async searchContacts(query) {
   const token = localStorage.getItem('token');
   try {
