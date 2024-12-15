@@ -93,7 +93,5 @@ export default {
 </script>
 
 <style scoped>
-body {
-  @apply bg-gray-100;
-}
+
 </style>

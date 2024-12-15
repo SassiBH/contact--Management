@@ -8,7 +8,7 @@ class AuthController
 {
     public function login($data)
 {
-    error_log("Login endpoint hit with data: " . json_encode($data)); // Debugging log
+  
     
     $user = User::findByUsername($data['username']);
     if ($user) {

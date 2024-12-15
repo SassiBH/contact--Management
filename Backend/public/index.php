@@ -1,7 +1,11 @@
 <?php
 
 
-header("Access-Control-Allow-Origin: *");
+$allowedOrigins = ['http://localhost:8080', 'http://localhost:8100'];
+$allowedOrigins = ['http://localhost:8080', 'http://localhost:8100','https://contact-management-orpin.vercel.app/'];
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+}
 header("Access-Control-Allow-Methods: GET, POST,PUT,DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
@@ -11,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204); // No Content
     exit;
 }
+
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -24,17 +29,7 @@ if (file_exists(__DIR__ . '/../.env')) {
 }
 //for testing prod
 
-$host = $_ENV['DB_HOST']; // From environment variables in Render
-$db = $_ENV['DB_NAME']; // From environment variables
-$user = $_ENV['DB_USER']; // From environment variables
-$pass = $_ENV['DB_PASS']; // From environment variables
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    echo "Connection successful!";
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
 
 
 $router = new Router();
