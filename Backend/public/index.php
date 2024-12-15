@@ -22,6 +22,20 @@ if (file_exists(__DIR__ . '/../.env')) {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
     $dotenv->load();
 }
+//for testing prod
+<?php
+$host = $_ENV['DB_HOST']; // From environment variables in Render
+$db = $_ENV['DB_NAME']; // From environment variables
+$user = $_ENV['DB_USER']; // From environment variables
+$pass = $_ENV['DB_PASS']; // From environment variables
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    echo "Connection successful!";
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
 
 $router = new Router();
 
