@@ -27,7 +27,7 @@ COPY ./ /var/www/html
 # Ensure proper file permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
-
+RUN php -r "require 'vendor/autoload.php'; echo 'Autoloader works!';"
 # Expose port 8101 for the backend API
 EXPOSE 8101
 
