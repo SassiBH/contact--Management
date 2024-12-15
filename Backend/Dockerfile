@@ -33,4 +33,4 @@ RUN php -r "require 'vendor/autoload.php'; echo 'Autoloader works!';"
 EXPOSE 8101
 
 # Start the PHP built-in server
-CMD ["php", "-S", "0.0.0.0:8101", "-t", "/var/www/html/public"]
+CMD ["sh", "-c", "ls -l /var/www/html/vendor && php -S 0.0.0.0:8101 -t /var/www/html/public"]
