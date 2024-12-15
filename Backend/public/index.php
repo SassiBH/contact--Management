@@ -23,7 +23,7 @@ if (file_exists(__DIR__ . '/../.env')) {
     $dotenv->load();
 }
 //for testing prod
-<?php
+
 $host = $_ENV['DB_HOST']; // From environment variables in Render
 $db = $_ENV['DB_NAME']; // From environment variables
 $user = $_ENV['DB_USER']; // From environment variables
@@ -35,7 +35,7 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
-?>
+
 
 $router = new Router();
 
