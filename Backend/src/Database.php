@@ -12,9 +12,11 @@ class Database
     {
         if (!self::$connection) {
             try {
-                $dsn = "pgsql:host=dpg-ctfiihl6l47c73b94gbg-a.oregon-postgres.render.com;dbname=contactmanagement_kuk6";
-                $pdo = new PDO($dsn, "root", "qMe8OGGp7K35mdccCD4BffmEdyZHnmx2");
-                self::$connection = $pdo;
+                self::$connection = new PDO(
+                    'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';charset=utf8mb4',
+                    $_ENV['DB_USER'],
+                    $_ENV['DB_PASS']
+                );
 
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
@@ -26,4 +28,3 @@ class Database
         return self::$connection;
     }
 }
-
