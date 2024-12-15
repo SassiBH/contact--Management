@@ -19,7 +19,8 @@ WORKDIR /var/www/html
 
 # Copy only the necessary application files
 COPY composer.json composer.lock /var/www/html/
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
+RUN composer dump-autoload
 
 # Copy the rest of the application files
 COPY ./ /var/www/html
