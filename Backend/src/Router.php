@@ -26,7 +26,8 @@ class Router
     }
 
     public function run()
-    {
+    {error_log(__DIR__ . '/Controllers/AuthController.php');
+
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = strtok($_SERVER['REQUEST_URI'], '?'); // Remove query strings
     
