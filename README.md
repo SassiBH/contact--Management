@@ -69,13 +69,13 @@ Before you begin, ensure you have met the following requirements:
 1. Start docker application
     ```bash
     docker-compose up
-2. Open the url for application in browser
-    - http://localhost:8100/ for build version
-    - http://localhost:8080/ for develop version
-3. To stop the application use the command
+2. To stop the application use the command
     ```bash
     docker compose stop
-4. Run this commands to open frontend in devoloper mode and visit http://localhost:8081/
+3. For production version open the url for application in browser(needs server refresh)
+    - http://localhost:8100/ for build version
+
+4. For devoloper version run this commands  and visit http://localhost:8081/
     ```bash
     cd frontend
     docker-compose build
