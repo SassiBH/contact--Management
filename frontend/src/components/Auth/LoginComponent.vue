@@ -59,6 +59,14 @@
           Register
         </button>
       </form>
+
+      <!-- Snackbar -->
+      <div
+        v-if="showSnackbar"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-md"
+      >
+        Login successful!
+      </div>
     </div>
   </div>
 </template>
@@ -71,8 +79,16 @@ export default {
     return {
       username: "",
       password: "",
-      errorMessage: "", // New property to store error message
+      errorMessage: "",
+      showSnackbar: false, // Snackbar visibility
     };
+  },
+  async created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.$router.push('/contacts');
+    }
+ 
   },
   methods: {
     async login() {
@@ -83,7 +99,15 @@ export default {
           password: this.password,
         });
         localStorage.setItem("token", response.data.token);
-        this.$router.push("/contacts");
+
+        // Show snackbar
+        this.showSnackbar = true;
+
+        // Hide snackbar after 2 seconds and redirect
+        setTimeout(() => {
+          this.showSnackbar = false;
+          this.$router.push("/contacts");
+        }, 2000);
       } catch (error) {
         this.errorMessage = "Invalid username or password. Please try again."; // Set the error message
       }
@@ -93,5 +117,11 @@ export default {
 </script>
 
 <style scoped>
-
+/* Snackbar animation  */
+.snackbar-enter-active, .snackbar-leave-active {
+  transition: opacity 0.5s;
+}
+.snackbar-enter-from, .snackbar-leave-to {
+  opacity: 0;
+}
 </style>
