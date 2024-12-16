@@ -182,8 +182,8 @@ export default {
         await axios.post(`${process.env.VUE_APP_API_URL}/contacts`, newContact, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.showSnackbarMessage('Contact created successfully!', 'bg-green-500');
         await this.fetchContacts();
+        this.showSnackbarMessage('Contact created successfully!', 'bg-green-500');
         this.closeCreateModal();
       } catch (error) {
         console.error(error);
@@ -202,8 +202,8 @@ export default {
         await axios.put(`${process.env.VUE_APP_API_URL}/contacts/${updatedContact.id}`, updatedContact, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.showSnackbarMessage('Contact updated successfully!', 'bg-blue-500');
         await this.fetchContacts();
+        this.showSnackbarMessage('Contact updated successfully!', 'bg-blue-500');
         this.closeEditModal();
       } catch (error) {
         console.error(error);
@@ -219,8 +219,8 @@ export default {
         await axios.delete(`${process.env.VUE_APP_API_URL}/contacts/${this.contactToDelete}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.showSnackbarMessage('Contact deleted successfully!', 'bg-red-500');
         await this.fetchContacts();
+        this.showSnackbarMessage('Contact deleted successfully!', 'bg-red-500');
       } catch (error) {
         console.error(error);
       } finally {
