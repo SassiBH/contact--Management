@@ -73,7 +73,7 @@ Before you begin, ensure you have met the following requirements:
     ```bash
     docker compose stop
 3. For production version open the url for application in browser(needs server refresh)
-    - http://localhost:8100/ for build version
+    - http://localhost:8100/
 
 4. For devoloper version run this commands  and visit http://localhost:8081/
     ```bash
