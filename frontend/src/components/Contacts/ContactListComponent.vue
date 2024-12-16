@@ -8,12 +8,14 @@
           class="logo"
         />
       </div>
+      <div class="m-2 flex flex-row border border-red-600 rounded divide-x divide-red-600 bg-red-100 text-base text-red-700 leading-5">
       <button
-        class="bg-white text-red-600 px-4 py-2 rounded-lg mb-6 flex items-center space-x-2 min-w-[120px] transition-all duration-200"
+        class="px-6 py-2 cursor-pointer text-red-800 focus:scale-110 focus:outline-none hover:bg-red-200 hover:text-red-800 transition duration-200 ease-in-out flex justify-center items-center"
         @click="logout"
       >
         <span>Logout</span>
       </button>
+      </div>
     </header>
 
     <h1 class="text-4xl font-bold text-gray-900 mb-6">Contacts</h1>
