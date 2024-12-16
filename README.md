@@ -75,6 +75,7 @@ Before you begin, ensure you have met the following requirements:
 3. To stop the application use the command
     ```bash
     docker compose stop
-4. If you make an update to the frontend, rebuild the application to apply the changes using this command
+4. Run this commands to open frontend in devoloper mode and visit http://localhost:8081/
     ```bash
+    cd frontend
     docker-compose build
