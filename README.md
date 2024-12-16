@@ -79,3 +79,4 @@ Before you begin, ensure you have met the following requirements:
     ```bash
     cd frontend
     npm run serve
+5. Make sure the url of frontend is enabled in the ./backend/index.php for access CORS origin 
