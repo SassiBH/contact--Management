@@ -55,7 +55,7 @@ Before you begin, ensure you have met the following requirements:
       ```bash
        docker-compose build
        docker-compose up
-6. Create .enc file in the backend folder with the following keys and values 
+6. Create .env file in the backend folder with the following keys and values 
     ```bash
     DB_HOST=db
     DB_NAME=contactManager
