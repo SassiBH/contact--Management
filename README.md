@@ -78,4 +78,4 @@ Before you begin, ensure you have met the following requirements:
 4. For devoloper version run this commands  and visit http://localhost:8081/
     ```bash
     cd frontend
-    docker-compose build
+    npm run serve
