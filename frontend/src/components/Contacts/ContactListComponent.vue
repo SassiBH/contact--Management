@@ -8,14 +8,12 @@
           class="logo"
         />
       </div>
-      <!-- Logout Button -->
       <button
-  class="bg-white text-red-600 px-4 py-2 rounded-lg mb-6 flex items-center space-x-2 min-w-[120px] transition-all duration-200"
-  @click="logout"
->
-  <span>Logout</span>
-  
-</button>
+        class="bg-white text-red-600 px-4 py-2 rounded-lg mb-6 flex items-center space-x-2 min-w-[120px] transition-all duration-200"
+        @click="logout"
+      >
+        <span>Logout</span>
+      </button>
     </header>
 
     <h1 class="text-4xl font-bold text-gray-900 mb-6">Contacts</h1>
@@ -28,7 +26,7 @@
     <!-- Add Contact Button -->
     <button
       class="bg-blue-600 text-white px-6 py-2 rounded-lg mb-4 hover:bg-blue-700 hover:text-white transition-all duration-200"
-      @click="openCreateModal()"
+      @click="openCreateModal"
     >
       Add Contact
     </button>
@@ -46,7 +44,7 @@
     <CreateModal
       :visible="showCreateModal"
       :contact="newContact"
-      @close="showCreateModal = false"
+      @close="closeCreateModal"
       @create-contact="createContact"
     />
 
@@ -54,9 +52,17 @@
     <EditModal
       :visible="showEditModal"
       :editContact="editContact"
-      @close="showEditModal = false"
+      @close="closeEditModal"
       @edit-contact="updateContact"
     />
+
+    <!-- Snackbar -->
+    <div
+      v-if="showSnackbar"
+      :class="`fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 text-white rounded-md shadow-md ${snackbarClass}`"
+    >
+      {{ snackbarMessage }}
+    </div>
 
     <!-- Contact List -->
     <div v-if="contacts.length === 0" class="text-gray-500 text-lg text-center my-10">No contacts found.</div>
@@ -65,7 +71,6 @@
         v-for="contact in contacts"
         :key="contact.id"
         class="bg-white shadow-lg rounded-lg p-6 mb-6 flex justify-between items-start hover:shadow-xl transition-all duration-200"
-        style="margin-bottom: 2.5rem;"
       >
         <div>
           <h2 class="text-2xl font-semibold text-gray-800">{{ contact.first_name }} {{ contact.last_name }}</h2>
@@ -97,8 +102,6 @@
   </div>
 </template>
 
-
-
 <script>
 import SearchBar from './SearchBar.vue';
 import ConfirmModal from './ConfirmModal.vue';
@@ -111,10 +114,12 @@ export default {
   data() {
     return {
       contacts: [],
-      searchQuery: '',
       showCreateModal: false,
       showEditModal: false,
       showDeleteModal: false,
+      showSnackbar: false,
+      snackbarMessage: '',
+      snackbarClass: '',
       contactToDelete: null,
       newContact: {
         user_id: '',
@@ -125,15 +130,7 @@ export default {
         age: '',
         country: '',
       },
-      editContact: {
-        id: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone: '',
-        age: '',
-        country: '',
-      },
+      editContact: {},
     };
   },
   async created() {
@@ -145,24 +142,19 @@ export default {
   },
   methods: {
     async fetchContacts() {
-  const token = localStorage.getItem('token');
-  try {
-    const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    // Check if response.data is an array
-    if (Array.isArray(response.data)) {
-      this.contacts = response.data;
-    } else {
-      console.error('Expected an array but received:', response.data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-},
-    async searchContacts(query) {
-  const token = localStorage.getItem('token');
-  try {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/contacts`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.contacts = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  async searchContacts(query) {
+    const token = localStorage.getItem('token');
+    try {
     if (query.trim() === '') {
       // If the search query is empty, fetch all contacts
       await this.fetchContacts();
@@ -181,39 +173,42 @@ export default {
     openCreateModal() {
       this.showCreateModal = true;
     },
-    async createContact(newContact) {
-    const token = localStorage.getItem('token');
-    try {
-      const response = await axios.post(`${process.env.VUE_APP_API_URL}/contacts`, newContact, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      this.contacts.push(response.data); // Add new contact to the list
-      await this.fetchContacts();
+    closeCreateModal() {
       this.showCreateModal = false;
-    } catch (error) {
-      console.error(error);
-    }
-  },
+    },
+    async createContact(newContact) {
+      const token = localStorage.getItem('token');
+      try {
+        await axios.post(`${process.env.VUE_APP_API_URL}/contacts`, newContact, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.showSnackbarMessage('Contact created successfully!', 'bg-green-500');
+        await this.fetchContacts();
+        this.closeCreateModal();
+      } catch (error) {
+        console.error(error);
+      }
+    },
     openEditModal(contact) {
       this.editContact = { ...contact };
       this.showEditModal = true;
     },
-    async updateContact(updatedContact) {
-    const token = localStorage.getItem('token');
-    try {
-      const response = await axios.put(
-        `${process.env.VUE_APP_API_URL}/contacts/${updatedContact.id}`,
-        updatedContact,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const index = this.contacts.findIndex(contact => contact.id === updatedContact.id);
-      if (index !== -1) this.contacts[index] = response.data; // Update contact in the list
-      await this.fetchContacts();
+    closeEditModal() {
       this.showEditModal = false;
-    } catch (error) {
-      console.error(error);
-    }
-  },
+    },
+    async updateContact(updatedContact) {
+      const token = localStorage.getItem('token');
+      try {
+        await axios.put(`${process.env.VUE_APP_API_URL}/contacts/${updatedContact.id}`, updatedContact, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.showSnackbarMessage('Contact updated successfully!', 'bg-blue-500');
+        await this.fetchContacts();
+        this.closeEditModal();
+      } catch (error) {
+        console.error(error);
+      }
+    },
     promptDelete(contactId) {
       this.contactToDelete = contactId;
       this.showDeleteModal = true;
@@ -224,17 +219,24 @@ export default {
         await axios.delete(`${process.env.VUE_APP_API_URL}/contacts/${this.contactToDelete}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.contacts = this.contacts.filter((contact) => contact.id !== this.contactToDelete);
+        this.showSnackbarMessage('Contact deleted successfully!', 'bg-red-500');
+        await this.fetchContacts();
       } catch (error) {
         console.error(error);
       } finally {
         this.showDeleteModal = false;
-        this.contactToDelete = null;
       }
     },
     cancelDelete() {
       this.showDeleteModal = false;
-      this.contactToDelete = null;
+    },
+    showSnackbarMessage(message, cssClass) {
+      this.snackbarMessage = message;
+      this.snackbarClass = cssClass;
+      this.showSnackbar = true;
+      setTimeout(() => {
+        this.showSnackbar = false;
+      }, 2000);
     },
     logout() {
       localStorage.removeItem('token');
@@ -243,6 +245,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .header {
   display: flex;
@@ -262,6 +265,7 @@ export default {
   height: auto;
   margin-right: 10px; /* Space between logo and site name */
 }
-
-
+.snackbar {
+  transition: opacity 0.5s;
+}
 </style>

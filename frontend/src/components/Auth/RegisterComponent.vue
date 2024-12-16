@@ -54,6 +54,14 @@
           Back to Login
         </button>
       </form>
+
+      <!-- Snackbar -->
+      <div
+        v-if="showSnackbar"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-md"
+      >
+        Registration successful! Redirecting to login...
+      </div>
     </div>
   </div>
 </template>
@@ -66,7 +74,15 @@ export default {
     return {
       username: "",
       password: "",
+      showSnackbar: false, // Snackbar visibility
     };
+  },
+  async created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.$router.push('/contacts');
+    }
+ 
   },
   methods: {
     async register() {
@@ -75,7 +91,15 @@ export default {
           username: this.username,
           password: this.password,
         });
-        this.$router.push("/login");
+
+        // Show snackbar
+        this.showSnackbar = true;
+
+        // Hide snackbar after 2 seconds and redirect to login
+        setTimeout(() => {
+          this.showSnackbar = false;
+          this.$router.push("/login");
+        }, 2000);
       } catch (error) {
         alert("Registration failed");
       }
@@ -85,5 +109,11 @@ export default {
 </script>
 
 <style scoped>
-/* Optional additional styles */
+/* Snackbar animation  */
+.snackbar-enter-active, .snackbar-leave-active {
+  transition: opacity 0.5s;
+}
+.snackbar-enter-from, .snackbar-leave-to {
+  opacity: 0;
+}
 </style>
