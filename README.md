@@ -75,7 +75,7 @@ Before you begin, ensure you have met the following requirements:
 3. For production version open the url for application in browser(needs server refresh)
     - http://localhost:8100/
 
-4. For devoloper version run this commands  and visit http://localhost:8081/
+4. For devoloper version run this commands  and visit http://localhost:8080/(by default if 8080 port is not in use)
     ```bash
     cd frontend
     npm run serve
