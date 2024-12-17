@@ -37,8 +37,14 @@ class AuthController
 
 public function register($data)
 {
-    if (!isset($data['username']) || !isset($data['password'])) {
+    if ((!isset($data['username']) || !isset($data['password']))||($data['username']===''|| !$data['password']==='')) {
+        http_response_code(400);
         echo json_encode(['error' => 'Username and password are required.']);
+        return;
+    }
+    if(User::findByUsername($data['username'])){
+        http_response_code(401);
+        echo json_encode(['error' => 'Username already used.']);
         return;
     }
 

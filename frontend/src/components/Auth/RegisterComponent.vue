@@ -13,6 +13,10 @@
       <!-- Register Form -->
       <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Register</h2>
       <form @submit.prevent="register">
+                <!-- Error Message -->
+                <div v-if="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded">
+          {{ errorMessage }}
+        </div>
         <!-- Username Field -->
         <div class="mb-4">
           <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -74,6 +78,7 @@ export default {
     return {
       username: "",
       password: "",
+      errorMessage: "",
       showSnackbar: false, // Snackbar visibility
     };
   },
@@ -86,6 +91,7 @@ export default {
   },
   methods: {
     async register() {
+      this.errorMessage = "";
       try {
         await axios.post(`${process.env.VUE_APP_API_URL}/register`, {
           username: this.username,
@@ -101,7 +107,10 @@ export default {
           this.$router.push("/login");
         }, 2000);
       } catch (error) {
-        alert("Registration failed");
+        if(error.status===401)
+        this.errorMessage = 'Username already used.'; 
+      else
+      this.errorMessage = 'Username and password are required.'; // Set the error message
       }
     },
   },
